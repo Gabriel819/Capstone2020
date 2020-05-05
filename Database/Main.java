@@ -4,10 +4,9 @@ import DBManagement.*;
 
 public class Main {
 	private final static String driv = "com.mysql.cj.jdbc.Driver";
-	//private final static String DB_URL = "jdbc:mysql://localhost/universitydb?serverTimezone=UTC";
-	private final static String DB_URL = "jdbc:mysql://moomin.crwrylxx8rjk.ap-northeast-2.rds.amazonaws.com";
-	private final static String USER_NAME = "olmang";
-	private final static String PASSWORD = "hovy158835!";
+	private final static String DB_URL = //server ip address
+	private final static String USER_NAME = // user_name
+	private final static String PASSWORD = // password
 	
 	static Connection conn = null;
 	static Statement stmt = null;
@@ -33,17 +32,7 @@ public class Main {
 			//insert.InsertItemInfo(stmt, pstmt, conn, "1", "tablet2", "1","10000");
 			//insert.InsertMember(stmt, pstmt, conn, "1", "ADMIN", "BASIC", "0", "0", "0", "0", "0", "0", 
 					//"0", "000000", "000000");
-			/*
-			String sql = "show databases";
-			System.out.println(sql);
-			ResultSet rs = stmt.executeQuery(sql);
 			
-			while(rs.next()) {
-				System.out.println(rs.get);
-				System.out.print('\n');
-			}
-			rs.close();
-			*/
 			//Create_Database_Table.CreateOrChangeDatabase("Universitydb", pstmt, conn);
 			//Create_Table.CreateTable("Universitydb",stmt, pstmt, conn);
 			//select.selectall(stmt, "member");
