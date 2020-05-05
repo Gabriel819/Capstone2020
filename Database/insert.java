@@ -31,10 +31,10 @@ public class insert {
         
         int count = pstmt.executeUpdate();
         if( count == 0 ){
-            System.out.println("µ¥ÀÌÅÍ ÀÔ·Â ½ÇÆĞ");
+            System.out.println("ë°ì´í„° ì…ë ¥ ì‹¤íŒ¨");
         }
         else{
-            System.out.println("µ¥ÀÌÅÍ ÀÔ·Â ¼º°ø");
+            System.out.println("ë°ì´í„° ì…ë ¥ ì„±ê³µ");
         }
 	}
 	
@@ -45,24 +45,15 @@ public class insert {
         pstmt.setString(1, item_idx);
         pstmt.setString(2, item_name);
         pstmt.setString(3, item_num);
-        pstmt.setString(4, "1"); // ¸· ¹°Ç°ÀÌ Ãß°¡µÇ¾úÀ» ¶§´Â ¾Æ¹«µµ »ç¿ëÇÏ°í ÀÖÁö ¾ÊÀ¸¹Ç·Î ADMINÀ¸·Î »ç¿ëÀÚ¸¦ ÇØ³õ´Â´Ù.
+        pstmt.setString(4, "1"); // ë§‰ ë¬¼í’ˆì´ ì¶”ê°€ë˜ì—ˆì„ ë•ŒëŠ” ì•„ë¬´ë„ ì‚¬ìš©í•˜ê³  ìˆì§€ ì•Šìœ¼ë¯€ë¡œ ADMINìœ¼ë¡œ ì‚¬ìš©ìë¥¼ í•´ë†“ëŠ”ë‹¤.
         pstmt.setString(5, rent_price);
-        /*
-        String sql2 = "SELECT MAJOR_IDX FROM MAJOR_INFO WHERE MAJOR_NAME = 'BASIC'";
-        ResultSet rs = state.executeQuery(sql2);
-        
-        while(rs.next()) {
-        	String major_idx = rs.getString("MAJOR_IDX");
-			pstmt.setString(3, major_idx);
-			break;
-        }
-        */
+       
         int count = pstmt.executeUpdate();
         if( count == 0 ){
-            System.out.println("µ¥ÀÌÅÍ ÀÔ·Â ½ÇÆĞ");
+            System.out.println("ë°ì´í„° ì…ë ¥ ì‹¤íŒ¨");
         }
         else{
-            System.out.println("µ¥ÀÌÅÍ ÀÔ·Â ¼º°ø");
+            System.out.println("ë°ì´í„° ì…ë ¥ ì„±ê³µ");
         }	
 	}
 	
@@ -74,10 +65,10 @@ public class insert {
         
         int count = pstmt.executeUpdate();
         if( count == 0 ){
-            System.out.println("µ¥ÀÌÅÍ ÀÔ·Â ½ÇÆĞ");
+            System.out.println("ë°ì´í„° ì…ë ¥ ì‹¤íŒ¨");
         }
         else{
-            System.out.println("µ¥ÀÌÅÍ ÀÔ·Â ¼º°ø");
+            System.out.println("ë°ì´í„° ì…ë ¥ ì„±ê³µ");
         }
 	}
 	
@@ -100,10 +91,10 @@ public class insert {
         
         int count = pstmt.executeUpdate();
         if( count == 0 ){
-            System.out.println("µ¥ÀÌÅÍ ÀÔ·Â ½ÇÆĞ");
+            System.out.println("ë°ì´í„° ì…ë ¥ ì‹¤íŒ¨");
         }
         else{
-            System.out.println("µ¥ÀÌÅÍ ÀÔ·Â ¼º°ø");
+            System.out.println("ë°ì´í„° ì…ë ¥ ì„±ê³µ");
         }
 	}
 }
