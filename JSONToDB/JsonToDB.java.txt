@@ -1,0 +1,100 @@
+package mavenweb;
+import java.sql.*;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import mavenweb.insert;
+
+public class JsonToDB {
+	public static void JsonToDB(Statement stmt, PreparedStatement pstmt, Connection conn) throws SQLException {
+		String MemberJson = "{\"USER_IDX\":\"3\",\"USER_NAME\":\"Jane\",\"USER_MAJOR\":\"Statistics\","
+				+ "\"USER_PHONE\" : \"01099999999\", \"USER_EMAIL\":\"ueu7394@naver.com\","
+				+ "\"USER_ID\":\"poison123\", \"USER_PW\":\"poison0000\","
+				+ "\"USER_GENDER\":\"FEMALE\", \"USER_NICKNAME\":\"POISON\"}";
+		String ItemJson = "{\"ITEM_IDX\":\"3\",\"ITEM_NAME\":\"TABLET_PENCIL_1\","
+				+ "\"ITEM_NUM\":\"3\", \"RENT_PRICE\":\"10000\"}";
+		String MajorJson = "{\"MAJOR_IDX\":\"3\", \"MAJOR_NAME\":\"Statistics\"}";
+		String ReqItemJson = "{\"SEQ\":\"2\", \"REQ_ITEM_NAME\":\"TABLET_A\",\"REQ_USER_NAME\":\"Mike\"}";
+		
+		JSONParser parser = new JSONParser();
+		
+		JSONObject MemberObj = null;
+		JSONObject ItemObj = null;
+		JSONObject MajorObj = null;
+		JSONObject ReqItemObj = null;
+		
+		try {
+			MemberObj = (JSONObject)parser.parse(MemberJson);
+			ItemObj = (JSONObject)parser.parse(ItemJson);
+			MajorObj = (JSONObject)parser.parse(MajorJson);
+			ReqItemObj = (JSONObject)parser.parse(ReqItemJson);
+		}catch(ParseException e) {
+			System.out.println("Fail\n");
+			e.printStackTrace();
+		}
+		
+		// INSERT INTO MEMBER TABLE
+		System.out.println("User : "+ MemberObj);
+		
+		String user_idx = (String)MemberObj.get("USER_IDX");
+		String user_name = (String)MemberObj.get("USER_NAME");
+		String user_major = (String)MemberObj.get("USER_MAJOR");
+		String user_phone = (String)MemberObj.get("USER_PHONE");
+		String user_email = (String)MemberObj.get("USER_EMAIL");
+		String user_id = (String)MemberObj.get("USER_ID");
+		String user_pw = (String)MemberObj.get("USER_PW");
+		String user_gender = (String)MemberObj.get("USER_GENDER");
+		String user_nickname = (String)MemberObj.get("USER_NICKNAME");
+		
+		System.out.println("User Index : " + user_idx);
+		System.out.println("User Name : " + user_name);
+		System.out.println("User Major : " + user_major);
+		System.out.println("User Phone : " + user_phone);
+		System.out.println("User Email : " + user_email);
+		System.out.println("User ID : " + user_id);
+		System.out.println("User Password : " + user_pw);
+		System.out.println("User Gender : " + user_gender);
+		System.out.println("User Nickname : " + user_nickname + "\n");
+		
+		//insert.InsertMember(stmt, pstmt, conn, user_idx, user_name, user_major, user_phone, user_email, user_id, user_pw, 
+				//user_gender, user_nickname);
+		
+		// INSERT INTO ITEM_INFO TABLE
+		System.out.println(ItemObj);
+		
+		String item_idx = (String)ItemObj.get("ITEM_IDX");
+		String item_name = (String)ItemObj.get("ITEM_NAME");
+		String item_num = (String)ItemObj.get("ITEM_NUM");
+		String rent_price = (String)ItemObj.get("RENT_PRICE");
+		
+		System.out.println("Item Idx : " + item_idx);
+		System.out.println("Item Name : " + item_name);
+		System.out.println("Item Number : " + item_num);
+		System.out.println("Rent Price : " + rent_price + "\n");
+		//insert.InsertItemInfo(stmt, pstmt, conn, item_idx, item_name, item_num, rent_price);
+		
+		// INSERT INTO MAJOR_INFO TABLE
+		System.out.println(MajorObj);
+		
+		String major_idx = (String) MajorObj.get("MAJOR_IDX");
+		String major_name = (String) MajorObj.get("MAJOR_NAME");
+		
+		System.out.println("Major Index : " + major_idx);
+		System.out.println("Major Name : " + major_name + "\n");
+		//insert.InsertMajorInfo(pstmt, conn, major_idx, major_name);
+		
+		
+		// INSERT INTO REQ_ITEM TABLE
+		System.out.println(ReqItemObj);
+		
+		String seq = (String)ReqItemObj.get("SEQ");
+		String item_name2 = (String)ReqItemObj.get("REQ_ITEM_NAME");
+		String user_name2 = (String)ReqItemObj.get("REQ_USER_NAME");
+		
+		System.out.println("Seq : " + seq);
+		System.out.println("Request Item Name : " + item_name2);
+		System.out.println("Request User Name : " + user_name2 + "\n");	
+		
+		//insert.InsertReqItem(stmt, pstmt, conn, seq, item_name2, user_name2);
+	}
+}
