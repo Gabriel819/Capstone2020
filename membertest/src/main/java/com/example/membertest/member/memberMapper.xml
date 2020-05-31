@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.membertest.memberMapper">
+    <select id="read" resultMap="MemberResultMap">
+        SELECT
+            USER_NAME
+            , USER_PHONE
+            , USER_EMAIL
+            , USER_ID
+            , USER_PW
+            , USER_GENDER
+            , USER_NICKNAME
+            , STAMP
+        FROM
+            member
+        WHERE USER_IDX = #{user_idx}
+    </select>
+
+    <resultMap id="MemberResultMap" type="Member">
+        <id property="userIdx" column="USER_IDX"/>
+        <result property="userName" column="USER_NAME" />
+        <result property="userPhone" column="USER_PHONE" />
+        <result property="userEmail" column="USER_EMAIL" />
+        <result property="userId" column="USER_ID" />
+        <result property="userPw" column="USER_PW" />
+        <result property="userGender" column="USER_GENDER" />
+        <result property="userNickname" column="USER_NICKNAME" />
+        <result property="stamp" column="STAMP" />
+    </resultMap>
+</mapper>
