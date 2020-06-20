@@ -27,15 +27,15 @@ public class kakaoCancel {
 
         // 서버로 요청할 Heaader
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "KakaoAK " + "52fe79625ce67af1245667efbb7ae4de");
+        headers.add("Authorization", "KakaoAK " + "admin key 입력");
         headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
         headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
 
         // 서버로 요청할 Body
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         params.add("cid", "TC0ONETIME");
-        params.add("tid", "T2774441757150778911");
-        params.add("cancel_amount", "200");
+        params.add("tid", "tid 입력");
+        params.add("cancel_amount", "결제 취소 금액 입력");
         params.add("cancel_tax_free_amount", "0");
 
         HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<MultiValueMap<String, String>>(params, headers);
