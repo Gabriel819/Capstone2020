@@ -7,123 +7,111 @@ import javax.sql.DataSource;
 
 public class Create_Table {	
 	static ResultSet rs, rs2;
-	/*
-	// 데이터베이스가 있는지 확인하고, 없으면 데이터베이스 생성 후 데이터베이스 전환
-	public static void CreateOrChangeDatabase(String dbName, PreparedStatement pstmt, Connection conn) {
-		try {
-			String SQL = "SELECT * from Information_schema.SCHEMATA WHERE "
-					+"SCHEMA_NAME = ?";
-			pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, dbName);
-			rs = pstmt.executeQuery();
-			
-			// 데이터베이스가 없다면 데이터베이스 생성
-			if (!rs.next()) {
-				Statement stmt = conn.createStatement();
-				String sql = "create database " + dbName;
-				boolean re = stmt.execute(sql);
-				if(!re)	System.out.println("데이터베이스 생성 실패 " + re);
-				stmt.close();
-			}
-			
-			// 데이터베이스를 변환 (use database)
-			conn.setCatalog(dbName);
-		} catch (Exception e) {
-			System.out.println("CreateOrChangeDatabase err : " + e);
-		}
-	}
 	
-	public static void ShowTables(String DbName, Connection conn) {
-		try {
-			DatabaseMetaData d = conn.getMetaData();
-			rs = d.getTables(DbName, "", "", new String[] {"TABLE"});
-			while(rs.next()) {
-				System.out.println("table names of " + DbName + " are "
-						+ rs.getString(3));
-			}
-		} catch(SQLException e) {
-			System.out.println(e);
-		}
-	}
-	*/
-	// 테이블이 있는지 확인하고 없으면 생성
 	public static void CreateTable(String DbName, Statement stmt, PreparedStatement pstmt, Connection conn) {
 		try {
-			// 데이터 베이스 생성 및 전환
-			//CreateOrChangeDatabase(DbName, pstmt, conn);
 			
-			String tableSQL = "CREATE TABLE IF NOT EXISTS MAJOR_INFO("
-					 + "MAJOR_IDX INT NOT NULL AUTO_INCREMENT,"
-					 + "MAJOR_NAME VARCHAR(30) NOT NULL,"
-					 + "PRIMARY KEY(MAJOR_IDX)"
-					 + ")CHARSET = utf8";
+			// cabinet
+			String tableSQL = "CREATE TABLE IF NOT EXISTS cabinet("
+					 + "CABINET_IDX INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+					 + "CABINET_NAME VARCHAR(20) NOT NULL,"
+					 + "LATITUDE DOUBLE NOT NULL,"
+					 + "LONGITUDE DOUBLE NOT NULL"
+					 + ")CHARSET = UTF8";
 			stmt.execute(tableSQL);
 			
-			tableSQL = "CREATE TABLE IF NOT EXISTS MEMBER("
-						 + "USER_IDX INT NOT NULL AUTO_INCREMENT,"
-						 + "USER_NAME VARCHAR(20) NOT NULL,"
-						 + "USER_MAJOR INT NOT NULL,"
-						 + "USER_PHONE VARCHAR(20) NOT NULL,"
-						 + "USER_EMAIL VARCHAR(100),"
-						 + "USER_POINT INT DEFAULT 0,"
-						 + "USER_ID VARCHAR(20) NOT NULL,"
-						 + "USER_PW VARCHAR(20) NOT NULL,"
-						 + "USER_GENDER VARCHAR(7),"
-						 + "USER_NICKNAME VARCHAR(10) NOT NULL,"
-						 + "START_DATE VARCHAR(6),"
-						 + "END_DATE VARCHAR(6),"
-						 + "PRIMARY KEY(USER_IDX),"
-						 + "FOREIGN KEY (USER_MAJOR) REFERENCES MAJOR_INFO (MAJOR_IDX)"
-						 + ")CHARSET = utf8";
+			// member
+			tableSQL = "CREATE TABLE IF NOT EXISTS member("
+						+ "USER_ID VARCHAR(20) NOT NULL PRIMARY KEY,"
+						+ "USER_NAME VARCHAR(20),"
+						+ "USER_PHONE VARCHAR(20),"
+						+ "USER_EMAIL VARCHAR(30),"
+						+ "USER_PW VARCHAR(20),"
+						+ "USER_GENDER VARCHAR(7),"
+						+ "USER_NICKNAME VARCHAR(20),"
+						+ "STAMP INT DEFAULT 0"
+						+ ")CHARSET = UTF8";
 			stmt.execute(tableSQL);
 			
-			tableSQL = "CREATE TABLE IF NOT EXISTS ITEM_INFO("
-					 + "ITEM_IDX INT NOT NULL AUTO_INCREMENT,"
+			//category
+			tableSQL = "CREATE TABLE IF NOT EXISTS category("
+					 + "CATEGORY_IDX INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+					 + "CATEGORY_NAME VARCHAR(20) NOT NULL"
+					 + ")CHARSET = UTF8";
+			stmt.execute(tableSQL);
+			
+
+			// item
+			tableSQL = "CREATE TABLE IF NOT EXISTS item("
+					 + "ITEM_IDX INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
 					 + "ITEM_NAME VARCHAR(20) NOT NULL,"
-					 + "ITEM_NUM INT DEFAULT 0,"
-					 + "USER_IDX INT,"
-					 + "RENT_PRICE INT NOT NULL,"
-					 + "PRIMARY KEY(ITEM_IDX),"
-					 + "FOREIGN KEY (USER_IDX) REFERENCES MEMBER (USER_IDX)"
-					 + ")CHARSET = utf8";
+					 + "CATEGORY_IDX INT NOT NULL,"
+					 + "RENT_PRICE INT NOT NULL DEFAULT 0,"
+					 + "START_CABINET_IDX INT,"
+					 + "END_CABINET_IDX INT,"
+					 + "START_TIME DATETIME,"
+					 + "END_TIME DATETIME,"
+					 + "STATE INT DEFAULT 1,"
+					 + "FOREIGN KEY (CATEGORY_IDX) REFERENCES category(CATEGORY_IDX) ON UPDATE CASCADE ON DELETE CASCADE,"
+					 + "FOREIGN KEY (START_CABINET_IDX) REFERENCES cabinet(CABINET_IDX) ON UPDATE CASCADE ON DELETE CASCADE,"
+					 + "FOREIGN KEY (END_CABINET_IDX) REFERENCES cabinet(CABINET_IDX) ON UPDATE CASCADE ON DELETE CASCADE"
+					 + ")CHARSET = UTF8";
 			stmt.execute(tableSQL);
 			
-			tableSQL = "CREATE TABLE IF NOT EXISTS REQ_ITEM("
-					 + "SEQ INT NOT NULL AUTO_INCREMENT,"
-					 + "REQ_ITEM_NAME VARCHAR(20) NOT NULL,"
-					 + "REQ_USER_NAME VARCHAR(20) NOT NULL,"
-					 + "REQ_USER_IDX INT NOT NULL,"
-					 + "FOREIGN KEY (REQ_USER_IDX) REFERENCES MEMBER (USER_IDX),"
-					 + "PRIMARY KEY(SEQ)"
-					 + ")CHARSET = utf8";
+			// rent
+			tableSQL = "CREATE TABLE IF NOT EXISTS rent("
+						+ "IDX INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+						+ "ITEM_IDX INT NOT NULL,"
+						+ "START_CABINET_IDX INT NOT NULL,"
+						+ "END_CABINET_IDX INT NOT NULL,"
+						+ "USER_ID VARCHAR(20) NOT NULL,"
+						+ "APPROVED_AT DATETIME,"
+						+ "AMOUNT INT NOT NULL,"
+						+ "START_TIME DATETIME NOT NULL,"
+						+ "END_TIME DATETIME NOT NULL,"
+						+ "STATE INT DEFAULT 1,"
+						+ "CATEGORY_IDX INT NOT NULL,"
+						+ "FOREIGN KEY (ITEM_IDX) REFERENCES item (ITEM_IDX) ON UPDATE CASCADE ON DELETE CASCADE,"
+						+ "FOREIGN KEY (START_CABINET_IDX) REFERENCES cabinet (CABINET_IDX) ON UPDATE CASCADE ON DELETE CASCADE,"
+						+ "FOREIGN KEY (END_CABINET_IDX) REFERENCES cabinet (END_CABINET_IDX) ON UPDATE CASCADE ON DELETE CASCADE,"
+						+ "FOREIGN KEY (USER_ID) REFERENCES member(USER_ID) ON UPDATE CASCADE ON DELETE CASCADE,"
+						+ "FOREIGN KEY (CATEGORY_IDX) REFERENCES category(CATEGORY_IDX) ON UPDATE CASCADE ON DELETE CASCADE"
+						+ ")CHARSET = UTF8";
+			stmt.execute(tableSQL);
+		
+			
+			// inquiry
+			tableSQL = "CREATE TABLE IF NOT EXISTS inquiry("
+				+ "IDX INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+				+ "REQUEST_DATE DATETIME NOT NULL,"
+				+ "USER_ID VARCHAR(20) NOT NULL,"
+				+ "TITLE VARCHAR(20) NOT NULL,"
+				+ "CONTENT VARCHAR(300) NOT NULL,"
+				+ "FOREIGN KEY (USER_ID) REFERENCES member(USER_ID) ON UPDATE CASCADE ON DELETE CASCADE"
+				+ ")CHARSET = UTF8";
 			stmt.execute(tableSQL);
 			
-			System.out.println("테이블 생성 완료");
+			
+			// payment
+			tableSQL = "CREATE TABLE IF NOT EXISTS payment("
+					+ "IDX INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+					+ "PARTNER_ORDER_ID VARCHAR(20) NOT NULL DEFAULT 12345,"
+					+ "TID VARCHAR(25) NOT NULL,"
+					+ "PARTNER_USER_ID VARCHAR(20) NOT NULL,"
+					+ "ITEM_NAME VARCHAR(20) NOT NULL,"
+					+ "QUANTITY INT NOT NULL,"
+					+ "TOTAL_AMOUNT INT NOT NULL,"
+					+ "TAX_FREE_AMOUNT INT NOT NULL,"
+					+ "STATE INT DEFAULT 1,"
+					+ "START_TIME DATETIME NOT NULL,"
+					+ "FOREIGN KEY (PARTNER_USER_ID) REFERENCES member(USER_ID) ON UPDATE CASCADE ON DELETE CASCADE"
+					+ ")CHARSET = UTF8";
+				stmt.execute(tableSQL);
+			
+			System.out.println("Table Creation Complete.");
 			
 			
-			/*
-			// information_schema.tables로부터 테이블의 존재 유무 확인
-			String tableSql = "SELECT table_name FROM information_schema where table_schema = ?"
-					+" and table_name = ?";
 			
-			pstmt = conn.prepareStatement(tableSql);
-			pstmt.setString(1, DbName);
-			pstmt.setString(2, tName);
-			rs = pstmt.executeQuery();
-			
-			// 테이블이 없다면 테이블 생성
-			if (!rs.next()) {
-				Statement stmt = conn.createStatement();
-				sql = "CREATE TABLE " + tName
-							 + "("
-							 + "no int primary key auto_increment,"
-							 + "name varchar(10)"
-							 + ")";
-				rs2 = stmt.executeQuery(sql);
-				stmt.close();
-				System.out.println(rs2);						
-			}
-			*/
 		} catch(Exception e) {
 			System.out.println("CreateTable err : " + e);
 		}
